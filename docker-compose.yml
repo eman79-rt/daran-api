@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "composer install --no-interaction &&
+      php artisan config:clear &&
+      if ! grep -q '^APP_KEY=base64:' .env; then php artisan key:generate --force; fi &&
+      php artisan migrate --seed --force &&
+      php artisan serve --host=0.0.0.0"
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: eman_dawara
+      MYSQL_USER: eman_dawara
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootsecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save 60 1
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  mysql_data:

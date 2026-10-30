@@ -1,0 +1,1 @@
+{"version":2,"defects":[],"times":{"Tests\\Feature\\PropertyApiTest::test_v1_and_v2_return_different_price_shapes":0.051,"Tests\\Feature\\PropertyApiTest::test_private_fields_never_appear_and_phone_is_hidden_from_guests":0.006,"Tests\\Feature\\PropertyApiTest::test_office_can_see_its_pending_property_but_cannot_edit_another_office_property":0.016}}

@@ -1,0 +1,6 @@
+.env
+.git
+vendor
+.phpunit.cache
+bootstrap/cache/*.php
+storage/logs/*
